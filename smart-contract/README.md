@@ -65,6 +65,10 @@ $ anvil --help
 $ cast --help
 ```
 
-### Sepolia deployment
+### Sepolia deployment PNS
 - GUID: `rmptxqztd18b8qqfpfidcu21lhweviaciprrqfpi3nyjastcgg`
-- URL: `https://sepolia.etherscan.io/address/0x89ccafc9e388ab4e72f9fdb80b94118abdcf5b2d`
+- URL: https://sepolia.etherscan.io/address/0x89ccafc9e388ab4e72f9fdb80b94118abdcf5b2d
+
+### Sepolia deployment Chat
+- GUID: `e6tlt5q6axv7ktzfcciw53zsjdgmfdzinrwpx1njd2ukaqhwxi`
+- URL: https://sepolia.etherscan.io/address/0xfea2426b499afe3f07402a761810fee2b27e6981
