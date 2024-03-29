@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
@@ -12,30 +12,25 @@ function useHasUsername() {
   const { walletProvider } = useWeb3ModalProvider();
   const [hasUsername, setHasUsername] = useState(false);
 
-  useEffect(() => {
+  const checkUsername = async (username) => {
     if (!isSupportedChain(chainId)) return console.error("Wrong network");
 
-    const checkUsername = async () => {
-      const readWriteProvider = getProvider(walletProvider);
-      const signer = await readWriteProvider.getSigner();
-      const pnsContract = getPNSContract(signer);
+    const readWriteProvider = getProvider(walletProvider);
+    const signer = await readWriteProvider.getSigner();
+    const pnsContract = getPNSContract(signer);
 
-      try {
-        const username = await pnsContract.getAddressForUsername(address);
+    try {
+      const userAddress = await pnsContract.getAddressForUsername(username);
+      const usernameExists = address === userAddress;
+      setHasUsername(usernameExists);
+      return usernameExists;
+    } catch (error) {
+      console.log(error);
+      alert(`Error: ${error.message}`);
+    }
+  };
 
-        setHasUsername(!!username);
-        console.log("Username: ", username);
-        console.log("Has username: ", hasUsername);
-      } catch (error) {
-        console.log(error);
-        alert(`Error: ${error.message}`);
-      }
-    };
-
-    checkUsername();
-  }, [address, walletProvider, chainId]);
-
-  return hasUsername;
+  return [hasUsername, checkUsername];
 }
 
 export default useHasUsername;

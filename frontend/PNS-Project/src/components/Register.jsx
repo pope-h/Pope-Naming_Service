@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import useRegisterUsername from "../hooks/useRegisterUsername";
 import { UserIcon, UploadIcon } from "@heroicons/react/solid";
 
@@ -8,6 +9,7 @@ function Register() {
   const [file, setFile] = useState(null);
   const [imageUri, setImageHash] = useState("");
   const registerUsername = useRegisterUsername();
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -36,6 +38,9 @@ function Register() {
 
       await registerUsername(username, imageCID);
       console.log("Username registered with image uri:", imageUri);
+
+      // Redirect to the login page
+      navigate("/login");
     } catch (error) {
       console.error("Error during file upload or contract interaction:", error);
     }

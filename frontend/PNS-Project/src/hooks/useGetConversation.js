@@ -8,13 +8,9 @@ import {
 
 const useGetConversation = (withName) => {
   const { chainId } = useWeb3ModalAccount();
-  // const { walletProvider } = useWeb3ModalProvider();
 
   return useCallback(async () => {
     if (!isSupportedChain(chainId)) return console.error("Wrong network");
-
-    // const readWriteProvider = getProvider(walletProvider);
-    // const signer = await readWriteProvider.getSigner();
 
     const contract = getChatContract(wssProvider);
     console.log(contract.interface.fragments.map((f) => f.name));

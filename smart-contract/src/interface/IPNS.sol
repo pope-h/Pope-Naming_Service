@@ -7,4 +7,8 @@ interface IPNS {
     function getAddressForUsername(string calldata _username) external view returns (address);
 
     function getImageCIDForUsername(string calldata _username) external view returns (string memory);
+
+    function getTotalUsers() external view returns (uint);
+
+    function getUserByIndex(uint index) external view returns (string memory username, string memory imageCID);
 }

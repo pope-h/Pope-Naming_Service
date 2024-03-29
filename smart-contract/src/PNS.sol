@@ -8,6 +8,7 @@ contract PNS {
         address owner;
     }
 
+    bytes32[] public keys;
     mapping(bytes32 => Record) private records;
     mapping(address => bytes32) private owners;
 
@@ -25,6 +26,7 @@ contract PNS {
         });
 
         owners[msg.sender] = key;
+        keys.push(key);
 
         emit UsernameRegistered(_username, msg.sender, _imageCID);
     }
@@ -37,5 +39,16 @@ contract PNS {
     function getImageCIDForUsername(string calldata _username) external view returns (string memory) {
         bytes32 key = keccak256(abi.encodePacked(_username));
         return records[key].imageCID;
+    }
+
+    function getTotalUsers() external view returns (uint) {
+        return keys.length;
+    }
+
+    function getUserByIndex(uint index) external view returns (string memory username, string memory imageCID) {
+        require(index < keys.length, "Index out of bounds");
+
+        Record memory record = records[keys[index]];
+        return (record.username, record.imageCID);
     }
 }
