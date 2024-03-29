@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
-import "../contracts/PNS.sol";
+import "../src/PNS.sol";
 
 contract PNSScript is Script {
     function setUp() public {}

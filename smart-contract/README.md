@@ -66,9 +66,9 @@ $ cast --help
 ```
 
 ### Sepolia deployment PNS
-- GUID: `rmptxqztd18b8qqfpfidcu21lhweviaciprrqfpi3nyjastcgg`
-- URL: https://sepolia.etherscan.io/address/0x89ccafc9e388ab4e72f9fdb80b94118abdcf5b2d
+- GUID: `zslu4kwy6xxb7jphqjmkarablvjrzvat8uutkrqk5t87ibit8b`
+- URL: https://sepolia.etherscan.io/address/0xf581e9686bb235f5a0f40963e060b7c573716c2d
 
 ### Sepolia deployment Chat
-- GUID: `e6tlt5q6axv7ktzfcciw53zsjdgmfdzinrwpx1njd2ukaqhwxi`
-- URL: https://sepolia.etherscan.io/address/0xfea2426b499afe3f07402a761810fee2b27e6981
+- GUID: `xgt52k67bixvgymkybrqqntrfdqfk4hfpjv7emdevyjz1ayiuh`
+- URL: https://sepolia.etherscan.io/address/0xf9abbd375a53bd4fa31bb12dbdd9fb0cbba6841c

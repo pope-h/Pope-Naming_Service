@@ -13,7 +13,7 @@ function useHasUsername() {
   const [hasUsername, setHasUsername] = useState(false);
 
   useEffect(() => {
-    if (!isSupportedChain(chainId)) alert("Unsupported chain");
+    if (!isSupportedChain(chainId)) return console.error("Wrong network");
 
     const checkUsername = async () => {
       const readWriteProvider = getProvider(walletProvider);
@@ -24,6 +24,8 @@ function useHasUsername() {
         const username = await pnsContract.getAddressForUsername(address);
 
         setHasUsername(!!username);
+        console.log("Username: ", username);
+        console.log("Has username: ", hasUsername);
       } catch (error) {
         console.log(error);
         alert(`Error: ${error.message}`);

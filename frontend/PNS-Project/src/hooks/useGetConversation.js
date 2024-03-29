@@ -1,41 +1,38 @@
 import { useCallback } from "react";
 import { isSupportedChain } from "../utils";
-import { getProvider } from "../constants/providers";
-import getChatContract from "../constants/contract";
+import { wssProvider } from "../constants/providers";
+import { getChatContract } from "../constants/contract";
 import {
   useWeb3ModalAccount,
-  useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 
-const useGetConversation = () => {
+const useGetConversation = (withName) => {
   const { chainId } = useWeb3ModalAccount();
-  const { walletProvider } = useWeb3ModalProvider();
+  // const { walletProvider } = useWeb3ModalProvider();
 
-  return useCallback(
-    async (withName) => {
-      if (!isSupportedChain(chainId)) alert("Unsupported chain");
+  return useCallback(async () => {
+    if (!isSupportedChain(chainId)) return console.error("Wrong network");
 
-      const readWriteProvider = getProvider(walletProvider);
-      const signer = await readWriteProvider.getSigner();
+    // const readWriteProvider = getProvider(walletProvider);
+    // const signer = await readWriteProvider.getSigner();
 
-      const contract = getChatContract(signer);
+    const contract = getChatContract(wssProvider);
+    console.log(contract.interface.fragments.map((f) => f.name));
 
-      try {
-        const tx = await contract.getConversationWith(withName);
-        const receipt = await tx.wait();
+    try {
+      const messages = contract.getConversationWith(withName); // removed await
 
-        if (receipt.status) {
-          alert("Message recieved");
-        } else {
-          alert("Unable to get message");
-        }
-      } catch (error) {
-        console.log(error);
-        alert(`Error: ${error.message}`);
+      if (messages) {
+        alert("Message recieved");
+        console.log(messages);
+      } else {
+        alert("Unable to get message");
       }
-    },
-    [chainId, walletProvider]
-  );
+    } catch (error) {
+      console.log(error);
+      alert(`Error: ${error.message}`);
+    }
+  }, [chainId, withName]);
 };
 
 export default useGetConversation;

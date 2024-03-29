@@ -1,11 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import useRegisterUsername from "../hooks/useRegisterUsername";
+import { UserIcon, UploadIcon } from "@heroicons/react/solid";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [file, setFile] = useState(null);
-  const [imageHash, setImageHash] = useState("");
+  const [imageUri, setImageHash] = useState("");
   const registerUsername = useRegisterUsername();
 
   const handleFileChange = (event) => {
@@ -29,60 +30,58 @@ function Register() {
         }
       );
 
-      const imageHash = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
-      setImageHash(imageHash);
+      const imageUri = `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`;
+      const imageCID = response.data.IpfsHash;
+      setImageHash(imageUri);
 
-      await registerUsername(username, imageHash);
-      console.log("Username registered with image hash:", imageHash);
+      await registerUsername(username, imageCID);
+      console.log("Username registered with image uri:", imageUri);
     } catch (error) {
       console.error("Error during file upload or contract interaction:", error);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 w-full">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
-          >
-            Username
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
+    <div
+      className="flex items-center justify-center h-screen"
+      style={{
+        backgroundImage: "url('https://source.unsplash.com/random')",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="bg-white rounded-lg shadow-lg p-5 md:p-20 mx-2">
+        <div className="text-center">
+          <h2 className="text-xl">Welcome to Our Platform</h2>
+          <p className="text-sm text-gray-500 py-3">Create your account</p>
         </div>
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="file"
-          >
-            Profile Picture
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="file"
-            type="file"
-            onChange={handleFileChange}
-          />
-        </div>
-        <div className="flex items-center justify-between">
+        <div className="space-y-5">
+          <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 focus:outline-none">
+            <UserIcon className="h-5 w-5 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full text-lg px-4 py-2 focus:outline-none"
+            />
+          </div>
+          <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 focus:outline-none">
+            <UploadIcon className="h-5 w-5 text-gray-500" />
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="w-full text-lg px-4 py-2 focus:outline-none"
+            />
+          </div>
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
             onClick={register}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg px-4 hover:bg-blue-700"
           >
             Register
           </button>
         </div>
-        {imageHash && (
-          <p className="text-green-500 mt-4">
-            Image uploaded to Pinata with hash: {imageHash}
+        {imageUri && (
+          <p className="text-green-500 mt-4 text-center">
+            Image uploaded to Pinata with uri: {imageUri}
           </p>
         )}
       </div>

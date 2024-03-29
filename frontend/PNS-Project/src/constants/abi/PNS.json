@@ -17,7 +17,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_imageHash",
+        "name": "_imageCID",
         "type": "string"
       }
     ],
@@ -37,7 +37,7 @@
     "inputs": [
       { "internalType": "string", "name": "_username", "type": "string" }
     ],
-    "name": "getImageHashForUsername",
+    "name": "getImageCIDForUsername",
     "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
     "stateMutability": "view",
     "type": "function"
@@ -45,7 +45,7 @@
   {
     "inputs": [
       { "internalType": "string", "name": "_username", "type": "string" },
-      { "internalType": "string", "name": "_imageHash", "type": "string" }
+      { "internalType": "string", "name": "_imageCID", "type": "string" }
     ],
     "name": "registerUsername",
     "outputs": [],
