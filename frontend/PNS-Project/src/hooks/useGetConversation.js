@@ -1,32 +1,31 @@
 import { useCallback } from "react";
 import { isSupportedChain } from "../utils";
-import { wssProvider } from "../constants/providers";
+import { getProvider } from "../constants/providers";
 import { getChatContract } from "../constants/contract";
 import {
-  useWeb3ModalAccount,
+  useWeb3ModalAccount, useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 
 const useGetConversation = () => {
   const { chainId } = useWeb3ModalAccount();
+  const { walletProvider } = useWeb3ModalProvider();
 
   return useCallback(
     async (withName) => {
       if (!isSupportedChain(chainId)) return console.error("Wrong network");
 
-      const contract = getChatContract(wssProvider);
-      console.log(contract.interface.fragments.map((f) => f.name));
+      const readWriteProvider = getProvider(walletProvider);
+      const signer = await readWriteProvider.getSigner();
+
+      const contract = getChatContract(signer);
+      console.log(contract);
 
       try {
-        const messages = await contract.getConversationWith(withName); // added await
+        console.log("first");
+        console.log("withName", withName);
+        const tx = await contract.getConversationWith(withName);
 
-        if (messages) {
-          alert("Message received");
-          console.log(messages);
-        } else {
-          alert("Unable to get message");
-        }
-
-        return messages; // added return
+        return tx;
       } catch (error) {
         console.log(error);
         alert(`Error: ${error.message}`);
@@ -34,7 +33,7 @@ const useGetConversation = () => {
 
       return []; // return empty array in case of error
     },
-    [chainId]
+    [chainId, walletProvider]
   );
 };
 

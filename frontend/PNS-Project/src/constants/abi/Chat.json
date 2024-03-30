@@ -33,19 +33,23 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "getConversationPartners",
+    "outputs": [
+      { "internalType": "address[]", "name": "", "type": "address[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "string", "name": "withName", "type": "string" }
     ],
     "name": "getConversationWith",
     "outputs": [
-      {
-        "components": [
-          { "internalType": "address", "name": "sender", "type": "address" },
-          { "internalType": "string", "name": "content", "type": "string" }
-        ],
-        "internalType": "struct Chat.Message[]",
-        "name": "",
-        "type": "tuple[]"
-      }
+      { "internalType": "address[]", "name": "", "type": "address[]" },
+      { "internalType": "string[]", "name": "", "type": "string[]" }
     ],
     "stateMutability": "view",
     "type": "function"

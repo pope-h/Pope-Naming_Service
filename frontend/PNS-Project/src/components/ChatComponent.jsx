@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useGetConversation from "../hooks/useGetConversation";
 import useSendMessage from "../hooks/useSendMessage";
 import useGetUsers from "../hooks/useGetUsers";
+import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 
 function ChatComponent() {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -11,14 +12,18 @@ function ChatComponent() {
   const sendMessage = useSendMessage();
   const getConversation = useGetConversation();
   const getUsers = useGetUsers();
+  const { account } = useWeb3ModalAccount();
 
   useEffect(() => {
     getUsers().then(setUsers);
   }, [getUsers]);
 
+
   useEffect(() => {
     if (selectedUser) {
-      getConversation(selectedUser.username).then(setMessages);
+      getConversation(selectedUser.username).then(res => {
+        setMessages(res);
+      });
     }
   }, [getConversation, selectedUser]);
 
@@ -26,39 +31,45 @@ function ChatComponent() {
     if (selectedUser && message) {
       await sendMessage(selectedUser.username, message);
       setMessage("");
-      getConversation(selectedUser.username).then(setMessages);
+      getConversation(selectedUser.username).then(res => setMessages(res));
     }
   };
 
   return (
-    <div className="flex h-full">
-      <div className="w-1/3 border-r-2 border-gray-200 overflow-auto">
+    <div className="flex gap-1 px-8 py-4 overflow-auto h-full">
+      <div className="w-1/4 h-full">
         {users &&
           users.map((user, index) => (
             <div
               key={index}
-              className="flex items-center p-4 hover:bg-gray-200 cursor-pointer"
+              className={`flex items-center p-4 hover:bg-gray-200 cursor-pointer ${selectedUser && "bg-gray-200"}`}
               onClick={() => setSelectedUser(user)}
             >
               <img
-                src={`https://gateway.pinata.cloud/ipfs/${user.imageCID}`}
+                src={`https://aquamarine-famous-penguin-727.mypinata.cloud/ipfs/${user.imageCID}`}
                 alt={user.username}
-                className="w-12 h-12 rounded-full mr-4"
+                className="w-12 h-12 rounded-full mr-8"
               />
-              <div className="text-sm">{user.username}</div>
+              <div className="text-lg">{user.username}</div>
             </div>
           ))}
       </div>
-      <div className="w-2/3 flex flex-col">
-        <div className="overflow-auto">
+      <div className="flex flex-col flex-1 gap-1 bg-gray-300">
+        <div className="overflow-auto flex-1">
           {messages &&
-             messages.map((message, index) => (
+            messages.map((message, index) => (
               <div key={index} className="flex items-start mb-4 text-white">
                 <div className="flex items-end">
                   <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
                     <div>
-                      <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-blue-600 text-white">
-                        {message.content}
+                      <span
+                        className={`px-4 py-2 rounded-lg inline-block ${
+                          message[0] === account
+                            ? "rounded-bl-none bg-blue-600"
+                            : "rounded-br-none bg-red-600"
+                        } text-white`}
+                      >
+                        {message[1]}
                       </span>
                     </div>
                   </div>
@@ -66,16 +77,17 @@ function ChatComponent() {
               </div>
             ))}
         </div>
-        <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-          <div className="relative flex">
+
+        <div className="relative flex items-center h-20 p-3 mt-auto">
+          <div className="w-full h-full bg-white rounded-full flex items-center pr-1.5">
             <input
               type="text"
               placeholder="Write something..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-full py-3"
+              className="flex-1 h-full bg-transparent border-nont focus:outline-none px-6"
             />
-            <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
+            <div className="items-center inset-y-0 hidden sm:flex">
               <button
                 type="button"
                 className="inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-600 focus:outline-none"

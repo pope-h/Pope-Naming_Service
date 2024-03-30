@@ -8,7 +8,7 @@ import Header from "./Header";
 
 const Layout = () => {
   return (
-    <main className="relative flex flex-col bg-neutral-100">
+    <main className="relative flex flex-col bg-neutral-100 h-screen">
       <Header />
       <div className="flex-1">
         <Outlet />
