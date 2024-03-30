@@ -18,12 +18,11 @@ const useGetConversation = () => {
       const signer = await readWriteProvider.getSigner();
 
       const contract = getChatContract(signer);
-      console.log(contract);
-
       try {
         console.log("first");
         console.log("withName", withName);
         const tx = await contract.getConversationWith(withName);
+        console.log("tx", tx);
 
         return tx;
       } catch (error) {

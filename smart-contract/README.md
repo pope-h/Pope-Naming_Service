@@ -72,3 +72,6 @@ $ cast --help
 ### Sepolia deployment Chat
 - GUID: `6umjkwd6usffjvpujum9img4qs9r7ffuzicnfztm26axxwdthy`
 - URL: https://sepolia.etherscan.io/address/0x3f1bd56e534946ec6368e8c7fc3dbd1e0003e46c
+
+### Previous Chat deployment CURRENTLY CHOSEN
+- URL: https://sepolia.etherscan.io/address/0x07B0C270D4f03AE4e49B75EFE727288FbD04e886

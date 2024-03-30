@@ -6,43 +6,46 @@ import { useWeb3ModalAccount } from "@web3modal/ethers/react";
 
 function ChatComponent() {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [allMessages, setAllMessages] = useState([])
+
+const [allUsers, setAllUsers] = useState([]);
   const sendMessage = useSendMessage();
   const getConversation = useGetConversation();
   const getUsers = useGetUsers();
-  const { account } = useWeb3ModalAccount();
+  const { address } = useWeb3ModalAccount();
 
   useEffect(() => {
-    getUsers().then(setUsers);
+    getUsers().then(setAllUsers);
   }, [getUsers]);
 
 
   useEffect(() => {
     if (selectedUser) {
       getConversation(selectedUser.username).then(res => {
-        setMessages(res);
+        setAllMessages(res);
       });
     }
   }, [getConversation, selectedUser]);
 
   const handleSendMessage = async () => {
-    if (selectedUser && message) {
-      await sendMessage(selectedUser.username, message);
-      setMessage("");
-      getConversation(selectedUser.username).then(res => setMessages(res));
+    if (selectedUser && userMessage) {
+      await sendMessage(selectedUser.username, userMessage);
+      setUserMessage("");
+      getConversation(selectedUser.username).then(res => setAllMessages(res));
     }
   };
 
   return (
     <div className="flex gap-1 px-8 py-4 overflow-auto h-full">
       <div className="w-1/4 h-full">
-        {users &&
-          users.map((user, index) => (
+        {allUsers &&
+          allUsers.map((user, index) => (
             <div
               key={index}
-              className={`flex items-center p-4 hover:bg-gray-200 cursor-pointer ${selectedUser && "bg-gray-200"}`}
+              className={`flex items-center p-4 hover:bg-gray-200 cursor-pointer ${
+                selectedUser && "bg-gray-200"
+              }`}
               onClick={() => setSelectedUser(user)}
             >
               <img
@@ -54,37 +57,40 @@ function ChatComponent() {
             </div>
           ))}
       </div>
-      <div className="flex flex-col flex-1 gap-1 bg-gray-300">
-        <div className="overflow-auto flex-1">
-          {messages &&
-            messages.map((message, index) => (
-              <div key={index} className="flex items-start mb-4 text-white">
-                <div className="flex items-end">
-                  <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                    <div>
-                      <span
-                        className={`px-4 py-2 rounded-lg inline-block ${
-                          message[0] === account
-                            ? "rounded-bl-none bg-blue-600"
-                            : "rounded-br-none bg-red-600"
-                        } text-white`}
-                      >
-                        {message[1]}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+      <div className="flex flex-col flex-1 bg-gray-200">
+        <div className="overflow-auto space-y-1 flex-1 p-4">
+          {allMessages.length <= 0 ? (
+            <p>Nothing to display</p>
+          ) : (
+            allMessages.map((message, index) => (
+              <div
+                key={index}
+                className="flex items-center w-full text-white"
+              >
+              <div className={`flex items-center w-full ${message[0] === address ? "justify-end" : "justify-start"}`}>
+              <div
+                  className={`w-max max-w-[400px] px-4 py-2 rounded-lg text-base ${
+                    message[0] === address
+                      ? "rounded-br-none bg-blue-600"
+                      : "rounded-bl-none bg-gray-400"
+                  }`}
+                >
+                {message[1]}
               </div>
-            ))}
+              </div>
+                  </div>
+            ))
+          )}
         </div>
+              
 
         <div className="relative flex items-center h-20 p-3 mt-auto">
           <div className="w-full h-full bg-white rounded-full flex items-center pr-1.5">
             <input
               type="text"
               placeholder="Write something..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={userMessage}
+              onChange={(e) => setUserMessage(e.target.value)}
               className="flex-1 h-full bg-transparent border-nont focus:outline-none px-6"
             />
             <div className="items-center inset-y-0 hidden sm:flex">
