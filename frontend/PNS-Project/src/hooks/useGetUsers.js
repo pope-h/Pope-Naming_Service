@@ -5,10 +5,11 @@ import { isSupportedChain } from "../utils";
 import { wssProvider } from "../constants/providers";
 
 const useGetUsers = () => {
-  const { chainId } = useWeb3ModalAccount();
+  const { chainId, isConnected } = useWeb3ModalAccount();
 
   const getUsers = useCallback(async () => {
     if (!isSupportedChain(chainId)) return console.error("Wrong network");
+    if (!isConnected) return console.error("Please connect your wallet");
 
     const contract = getPNSContract(wssProvider);
     console.log(contract.interface.fragments.map((f) => f.name));
@@ -27,7 +28,7 @@ const useGetUsers = () => {
       console.log(error);
       alert(`Error: ${error.message}`);
     }
-  }, [chainId]);
+  }, [chainId, isConnected]);
 
   return getUsers;
 };

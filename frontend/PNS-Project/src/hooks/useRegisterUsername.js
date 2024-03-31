@@ -5,13 +5,14 @@ import getPNSContract from "../constants/contract";
 import { useWeb3ModalAccount, useWeb3ModalProvider } from "@web3modal/ethers/react";
 
 const useRegisterUsername = () => {
-  const { chainId } = useWeb3ModalAccount();
+  const { chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   return useCallback(
     async (username, imageHash) => {
       if (!chainId || !walletProvider)
         return console.error("Web3Modal not connected");
+      if (!isConnected) return console.error("Please connect your wallet");
 
       const readWriteProvider = getProvider(walletProvider);
       const signer = await readWriteProvider.getSigner();
@@ -32,7 +33,7 @@ const useRegisterUsername = () => {
         alert(`Error: ${error.message}`);
       }
     },
-    [chainId, walletProvider]
+    [chainId, isConnected, walletProvider]
   );
 };
 

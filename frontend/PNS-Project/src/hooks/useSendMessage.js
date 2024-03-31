@@ -8,12 +8,13 @@ import {
 } from "@web3modal/ethers/react";
 
 const useSendMessage = () => {
-  const { chainId } = useWeb3ModalAccount();
+  const { chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   return useCallback(
     async (toName, message) => {
       if (!isSupportedChain(chainId)) return console.error("Wrong network");
+      if (!isConnected) return console.error("Please connect your wallet");
 
       const readWriteProvider = getProvider(walletProvider);
       const signer = await readWriteProvider.getSigner();
@@ -35,7 +36,7 @@ const useSendMessage = () => {
         alert(`Error: ${error.message}`);
       }
     },
-    [chainId, walletProvider]
+    [chainId, isConnected, walletProvider]
   );
 };
 

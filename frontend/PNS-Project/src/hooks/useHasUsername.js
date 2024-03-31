@@ -8,12 +8,13 @@ import { isSupportedChain } from "../utils";
 import getPNSContract from "../constants/contract";
 
 function useHasUsername() {
-  const { chainId, address } = useWeb3ModalAccount();
+  const { chainId, address, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
   const [hasUsername, setHasUsername] = useState(false);
 
   const checkUsername = async (username) => {
     if (!isSupportedChain(chainId)) return console.error("Wrong network");
+    if (!isConnected) return console.error("Please connect your wallet");
 
     const readWriteProvider = getProvider(walletProvider);
     const signer = await readWriteProvider.getSigner();
