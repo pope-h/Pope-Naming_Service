@@ -21,6 +21,7 @@ const useSendMessage = () => {
       const contract = getChatContract(signer);
 
       try {
+        // https://pope-naming-service.onrender.com/sendMessage(toName, message);
         const tx = await contract.sendMessage(toName, message);
         const receipt = await tx.wait();
 
